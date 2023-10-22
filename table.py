@@ -78,7 +78,7 @@ class Ui_TableEditor(object):
 
     def retranslateUi(self, TableEditor):
         _translate = QtCore.QCoreApplication.translate
-        TableEditor.setWindowTitle(_translate("TableEditor", "CSVReader"))
+        TableEditor.setWindowTitle(_translate("TableEditor", "ACSV Reader"))
         self.label.setText(_translate("TableEditor", "Разделитель строк"))
         self.label_2.setText(_translate("TableEditor", "Разделитель столбцов"))
         self.label_3.setText(_translate("TableEditor", "Сортировать как числа"))
