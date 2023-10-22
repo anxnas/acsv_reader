@@ -26,7 +26,7 @@
 
 ## Установка
 
-1. Клонируйте репозиторий: `git clone https://github.com/yourusername/yourrepository.git`
+1. Клонируйте репозиторий: `git clone https://github.com/anxnas/acsv_reader.git`
 2. Установите зависимости: `pip install -r requirements.txt`
 3. Запустите `main.py` для открытия редактора таблиц: `python main.py`
 
