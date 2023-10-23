@@ -75,18 +75,55 @@ class MyTableEditor(QMainWindow, Ui_TableEditor):
                         column_data_strings.append(value)
             return column_data_numbers, column_data_strings
 
-        column_data_numbers, column_data_strings = get_first_column(self)
-        if self.tableWidget.horizontalHeader().sortIndicatorOrder() == Qt.AscendingOrder:
-            column_data_numbers.sort()
-            column_data_strings.sort()
-            column_data = column_data_numbers + column_data_strings
+        def get_rows(self, reverses):
+            rows = []
+            for row in range(self.tableWidget.rowCount()):
+                row_data = []
+                for col in range(self.tableWidget.columnCount()):
+                    item = self.tableWidget.item(row, col)
+                    if item is not None:
+                        value = item.text()
+                        if self.sort_check.isChecked():
+                            try:
+                                value = float(value)
+                                if value.is_integer():
+                                    value = int(value)
+                                row_data.append(value)
+                            except ValueError:
+                                row_data.append(value)
+                        else:
+                            row_data.append(value)
+                if len(row_data) > logicalIndex:  # Добавьте эту строку
+                    if reverses == False:
+                        rows.append(row_data)
+                        rows.sort(key=lambda x: x[logicalIndex])
+                    elif reverses == True:
+                        rows.append(row_data)
+                        rows.sort(key=lambda x: x[logicalIndex], reverse=True)
+            return rows
+
+        if self.string_all.isChecked():
+            if self.tableWidget.horizontalHeader().sortIndicatorOrder() == Qt.AscendingOrder:
+                rows = get_rows(self, reverses = False)
+            else:
+                rows = get_rows(self, reverses = True)
+            self.tableWidget.setSortingEnabled(False)
+            for row, row_data in enumerate(rows):
+                for col, value in enumerate(row_data):
+                    self.tableWidget.setItem(row, col, QTableWidgetItem(str(value)))
         else:
-            column_data_numbers.sort(reverse=True)
-            column_data_strings.sort(reverse=True)
-            column_data = column_data_strings + column_data_numbers
-        self.tableWidget.setSortingEnabled(False)
-        for row, value in enumerate(column_data):
-            self.tableWidget.setItem(row, logicalIndex, QTableWidgetItem(str(value)))
+            column_data_numbers, column_data_strings = get_first_column(self)
+            if self.tableWidget.horizontalHeader().sortIndicatorOrder() == Qt.AscendingOrder:
+                column_data_numbers.sort()
+                column_data_strings.sort()
+                column_data = column_data_numbers + column_data_strings
+            else:
+                column_data_numbers.sort(reverse=True)
+                column_data_strings.sort(reverse=True)
+                column_data = column_data_strings + column_data_numbers
+            self.tableWidget.setSortingEnabled(False)
+            for row, value in enumerate(column_data):
+                self.tableWidget.setItem(row, logicalIndex, QTableWidgetItem(str(value)))
 
     def load_settings(self):
         try:
